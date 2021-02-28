@@ -2,18 +2,19 @@
 const HSB_MAX = 256;
 const FRAME_RATE = 30;
 
-const CANVAS_WIDTH_GRID = 20;
-const CANVAS_HEIGHT_GRID = 10;
+const CANVAS_WIDTH_GRID = 16;
+const CANVAS_HEIGHT_GRID = 16;
 const GRID_CELL_SIZE = 50;
 const CANVAS_WIDTH_PX = CANVAS_WIDTH_GRID * GRID_CELL_SIZE; // canvas size, in pixels
 const CANVAS_HEIGHT_PX = CANVAS_HEIGHT_GRID * GRID_CELL_SIZE; // canvas size, in pixels
 const CANVAS_BACKGROUND_COLOR = 0;
 
-const SNAKE_UPDATE_RATE = FRAME_RATE / 8; // snake is updated every `SNAKE_UPDATE_RATE` frames
+const SNAKE_UPDATE_RATE = FRAME_RATE / 15; // snake is updated every `SNAKE_UPDATE_RATE` frames
 const SNAKE_DIRECTION_LEFT = 0;
 const SNAKE_DIRECTION_UP = 1;
 const SNAKE_DIRECTION_RIGHT = 2;
 const SNAKE_DIRECTION_DOWN = 3;
+const SNAKE_HUE_STEP = 5;
 const SNAKE_HUE_OFFSET = HSB_MAX / 16; // offset in hue that each body part has compared to the previous one
 
 // GLOBAL STATE (snake)
@@ -138,10 +139,9 @@ function snake_death() {
 function generate_new_food() {
     let conflict = false;
     do {
-        console.log(`generating new food... (${conflict})`);
         conflict = false;
-        food_x = Math.floor(random(CANVAS_WIDTH_GRID));
-        food_y = Math.floor(random(CANVAS_HEIGHT_GRID));
+        food_x = Math.floor(Math.random() * CANVAS_WIDTH_GRID);
+        food_y = Math.floor(Math.random() * CANVAS_HEIGHT_GRID);
         for (let i = 0; i < snake_x.length; ++i) {
             conflict = conflict || (snake_x[i] === food_x && snake_y[i] === food_y);
         }
@@ -159,7 +159,7 @@ function draw_snake() {
             GRID_CELL_SIZE
         );
     }
-    snake_hue = (snake_hue + 1) % HSB_MAX;
+    snake_hue = (snake_hue + SNAKE_HUE_STEP) % HSB_MAX;
 }
 
 function draw_food() {
@@ -173,7 +173,7 @@ function draw_food() {
 }
 
 function lose() {
-    window.alert("you lost! lmao idiot");
+    // for now ignore death i guess
 }
 
 function keyPressed() {
