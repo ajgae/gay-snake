@@ -4,12 +4,12 @@ const FRAME_RATE = 30;
 
 const CANVAS_WIDTH_GRID = 16;
 const CANVAS_HEIGHT_GRID = 16;
-const GRID_CELL_SIZE = 50;
+const GRID_CELL_SIZE = 40;
 const CANVAS_WIDTH_PX = CANVAS_WIDTH_GRID * GRID_CELL_SIZE; // canvas size, in pixels
 const CANVAS_HEIGHT_PX = CANVAS_HEIGHT_GRID * GRID_CELL_SIZE; // canvas size, in pixels
 const CANVAS_BACKGROUND_COLOR = 0;
 
-const SNAKE_UPDATE_RATE = FRAME_RATE / 15; // snake is updated every `SNAKE_UPDATE_RATE` frames
+const SNAKE_UPDATE_RATE = FRAME_RATE / 10; // snake is updated every `SNAKE_UPDATE_RATE` frames
 const SNAKE_DIRECTION_LEFT = 0;
 const SNAKE_DIRECTION_UP = 1;
 const SNAKE_DIRECTION_RIGHT = 2;
