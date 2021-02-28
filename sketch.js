@@ -75,6 +75,10 @@ function update_snake() {
             break;
     }
 
+    if (snake_death()) {
+        lose();
+    }
+
     if (snake_x[0] === food_x
      && snake_y[0] === food_y) {
         food_has_been_eaten = true;
@@ -117,6 +121,17 @@ function move_snake(x, y) {
     }
 }
 
+function snake_death() {
+    let result = false;
+    for (let i = 1; i < snake_x.length; ++i) {
+        if (snake_x[0] === snake_x[i] && snake_y[0] === snake_y[i]) {
+            result = true;
+            break;
+        }
+    }
+    return result;
+}
+
 function generate_new_food() {
     let conflict = false;
     do {
@@ -152,6 +167,10 @@ function draw_food() {
         GRID_CELL_SIZE,
         GRID_CELL_SIZE
     );
+}
+
+function lose() {
+    window.alert("you lost! lmao idiot");
 }
 
 function keyPressed() {
