@@ -2,10 +2,11 @@
 const HSB_MAX = 256;
 const FRAME_RATE = 30;
 
-const CANVAS_SIZE = 400;
+const CANVAS_SIZE_PX = 400; // canvas size, in pixels
+const CANVAS_SIZE_GRID = 20; // canvas size, in grid cell count
 const CANVAS_BACKGROUND_COLOR = 0;
 
-const SNAKE_BODY_SIZE = CANVAS_SIZE/20; // aka. grid cell size
+const GRID_CELL_SIZE = CANVAS_SIZE_PX / CANVAS_SIZE_GRID; // aka. grid cell size
 const SNAKE_UPDATE_RATE = FRAME_RATE/2; // snake is updated every `SNAKE_UPDATE_RATE` frames
 const SNAKE_DIRECTION_LEFT = 0;
 const SNAKE_DIRECTION_UP = 1;
@@ -15,19 +16,25 @@ const SNAKE_HUE_OFFSET = HSB_MAX / 16; // offset in hue that each body part has 
 
 // GLOBAL STATE (snake)
 let snake_hue = 0; // snake body color
-let snake_x = [4*SNAKE_BODY_SIZE, 3*SNAKE_BODY_SIZE, 2*SNAKE_BODY_SIZE, 1*SNAKE_BODY_SIZE]; // x positions of snake body parts
-let snake_y = [4*SNAKE_BODY_SIZE, 4*SNAKE_BODY_SIZE, 4*SNAKE_BODY_SIZE, 4*SNAKE_BODY_SIZE]; // y positions of snake body parts
+let snake_x = [4, 3, 2, 1]; // x positions of snake body parts, in grid cell count
+let snake_y = [4, 4, 4, 4]; // y positions of snake body parts, in grid cell count
 let snake_tick_ctr = 0; // counter to check if the snake should be updated
 let snake_dir = SNAKE_DIRECTION_RIGHT;
 let snake_dir_next = SNAKE_DIRECTION_RIGHT;
 
+// GLOBAL STATE (food)
+let food_x, food_y;
+
 function setup() {
+    // initializations
+    food_x = random(0, CANVAS_SIZE_GRID);
+
     // settings
     colorMode(HSB, HSB_MAX);
     frameRate(FRAME_RATE);
 
     // canvas stuff
-    createCanvas(CANVAS_SIZE, CANVAS_SIZE);
+    createCanvas(CANVAS_SIZE_PX, CANVAS_SIZE_PX);
     background(CANVAS_BACKGROUND_COLOR);
 }
 
@@ -77,20 +84,20 @@ function move_snake(x, y) {
     }
 
     // move snake head
-    snake_x[0] += x * SNAKE_BODY_SIZE;
-    snake_y[0] += y * SNAKE_BODY_SIZE;
+    snake_x[0] += x;
+    snake_y[0] += y;
     // wrap around the world
-    if (snake_x[0] >= CANVAS_SIZE) { // reached right border
+    if (snake_x[0] >= CANVAS_SIZE_GRID) { // reached right border
         snake_x[0] = 0;
     }
     if (snake_x[0] < 0) { // reached left border
-        snake_x[0] = CANVAS_SIZE - SNAKE_BODY_SIZE;
+        snake_x[0] = CANVAS_SIZE_GRID - 1;
     }
-    if (snake_y[0] >= CANVAS_SIZE) { // reached lower border
+    if (snake_y[0] >= CANVAS_SIZE_GRID) { // reached lower border
         snake_y[0] = 0;
     }
     if (snake_y[0] < 0) { // reached upped border
-        snake_y[0] = CANVAS_SIZE - SNAKE_BODY_SIZE;
+        snake_y[0] = CANVAS_SIZE_GRID - 1;
     }
 }
 
@@ -98,7 +105,12 @@ function draw_snake() {
     for (let i = 0; i < snake_x.length; ++i) {
         const body_part_hue = (snake_hue + i * SNAKE_HUE_OFFSET) % HSB_MAX;
         fill(body_part_hue, HSB_MAX, HSB_MAX);
-        rect(snake_x[i], snake_y[i], SNAKE_BODY_SIZE, SNAKE_BODY_SIZE);
+        rect(
+            snake_x[i] * GRID_CELL_SIZE,
+            snake_y[i] * GRID_CELL_SIZE,
+            GRID_CELL_SIZE,
+            GRID_CELL_SIZE
+        );
     }
     snake_hue = (snake_hue + 1) % HSB_MAX;
 }
