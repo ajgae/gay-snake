@@ -6,13 +6,14 @@ const CANVAS_SIZE = 400;
 const CANVAS_BACKGROUND_COLOR = 0;
 
 const SNAKE_BODY_SIZE = CANVAS_SIZE/20; // aka. grid cell size
-const SNAKE_UPDATE_RATE = FRAME_RATE/2;
+const SNAKE_UPDATE_RATE = FRAME_RATE/2; // snake is updated every `SNAKE_UPDATE_RATE` frames
 const SNAKE_DIRECTION_LEFT = 0;
 const SNAKE_DIRECTION_UP = 1;
 const SNAKE_DIRECTION_RIGHT = 2;
 const SNAKE_DIRECTION_DOWN = 3;
+const SNAKE_HUE_OFFSET = HSB_MAX / 16; // offset in hue that each body part has compared to the previous one
 
-// GLOBAL STATE
+// GLOBAL STATE (snake)
 let snake_hue = 0; // snake body color
 let snake_x = [4*SNAKE_BODY_SIZE, 3*SNAKE_BODY_SIZE, 2*SNAKE_BODY_SIZE, 1*SNAKE_BODY_SIZE]; // x positions of snake body parts
 let snake_y = [4*SNAKE_BODY_SIZE, 4*SNAKE_BODY_SIZE, 4*SNAKE_BODY_SIZE, 4*SNAKE_BODY_SIZE]; // y positions of snake body parts
@@ -32,6 +33,7 @@ function setup() {
 
 function draw() {
     background(CANVAS_BACKGROUND_COLOR);
+
     // only update the snake every SNAKE_UPDATE_RATE frames
     if (snake_tick_ctr < SNAKE_UPDATE_RATE) {
         ++snake_tick_ctr;
@@ -39,16 +41,16 @@ function draw() {
         update_snake();
         snake_tick_ctr = 0;
     }
+
     // TODO optimize: only need to redraw on update, really
     draw_snake();
 }
 
 function update_snake() {
-
-    // actually update the snakes direction
+    // actually update snake's direction
     snake_dir = snake_dir_next;
 
-    // move snake in the right direction
+    // move snake in the correct direction
     switch (snake_dir) {
         case SNAKE_DIRECTION_LEFT:
             move_snake(-1, 0);
@@ -63,8 +65,6 @@ function update_snake() {
             move_snake(0, 1);
             break;
     }
-
-    snake_tick_ctr = 0;
 }
 
 // advance the entire snake one tile in the direction specified by
@@ -92,11 +92,12 @@ function move_snake(x, y) {
     if (snake_y[0] < 0) { // reached upped border
         snake_y[0] = CANVAS_SIZE - SNAKE_BODY_SIZE;
     }
-}    
+}
 
 function draw_snake() {
-    fill(snake_hue, HSB_MAX, HSB_MAX);
     for (let i = 0; i < snake_x.length; ++i) {
+        const body_part_hue = (snake_hue + i * SNAKE_HUE_OFFSET) % HSB_MAX;
+        fill(body_part_hue, HSB_MAX, HSB_MAX);
         rect(snake_x[i], snake_y[i], SNAKE_BODY_SIZE, SNAKE_BODY_SIZE);
     }
     snake_hue = (snake_hue + 1) % HSB_MAX;
