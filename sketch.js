@@ -2,8 +2,8 @@
 const HSB_MAX = 256;
 const FRAME_RATE = 30;
 
-const CANVAS_SIZE_GRID = 20;
-const GRID_CELL_SIZE = 20;
+const CANVAS_SIZE_GRID = 10;
+const GRID_CELL_SIZE = 50;
 const CANVAS_SIZE_PX = CANVAS_SIZE_GRID * GRID_CELL_SIZE; // canvas size, in pixels
 const CANVAS_BACKGROUND_COLOR = 0;
 
@@ -16,8 +16,8 @@ const SNAKE_HUE_OFFSET = HSB_MAX / 16; // offset in hue that each body part has 
 
 // GLOBAL STATE (snake)
 let snake_hue = 0; // snake body color
-let snake_x = [4, 3, 2, 1]; // x positions of snake body parts, in grid cell count
-let snake_y = [4, 4, 4, 4]; // y positions of snake body parts, in grid cell count
+let snake_x = [CANVAS_SIZE_GRID / 2 - 1, CANVAS_SIZE_GRID / 2 - 2]; // x positions of snake body parts, in grid cell count
+let snake_y = [CANVAS_SIZE_GRID / 2 - 1, CANVAS_SIZE_GRID / 2 - 1]; // y positions of snake body parts, in grid cell count
 let snake_tick_ctr = 0; // counter to check if the snake should be updated
 let snake_dir = SNAKE_DIRECTION_RIGHT;
 let snake_dir_next = SNAKE_DIRECTION_RIGHT;
@@ -33,6 +33,7 @@ function setup() {
     // settings
     colorMode(HSB, HSB_MAX);
     frameRate(FRAME_RATE);
+    noStroke();
 
     // canvas stuff
     createCanvas(CANVAS_SIZE_PX, CANVAS_SIZE_PX);
