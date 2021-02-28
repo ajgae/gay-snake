@@ -7,7 +7,7 @@ const CANVAS_SIZE_GRID = 20; // canvas size, in grid cell count
 const CANVAS_BACKGROUND_COLOR = 0;
 
 const GRID_CELL_SIZE = CANVAS_SIZE_PX / CANVAS_SIZE_GRID; // aka. grid cell size
-const SNAKE_UPDATE_RATE = FRAME_RATE / 4; // snake is updated every `SNAKE_UPDATE_RATE` frames
+const SNAKE_UPDATE_RATE = FRAME_RATE / 8; // snake is updated every `SNAKE_UPDATE_RATE` frames
 const SNAKE_DIRECTION_LEFT = 0;
 const SNAKE_DIRECTION_UP = 1;
 const SNAKE_DIRECTION_RIGHT = 2;
@@ -165,7 +165,6 @@ function keyPressed() {
         break;
     case UP_ARROW:
         if (snake_dir !== SNAKE_DIRECTION_DOWN) {
-
             snake_dir_next = SNAKE_DIRECTION_UP;
         }
         break;
