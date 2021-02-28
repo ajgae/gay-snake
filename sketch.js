@@ -14,8 +14,8 @@ const SNAKE_DIRECTION_DOWN = 3;
 
 // GLOBAL STATE
 let snake_hue = 0; // snake body color
-let snake_x = [4*SNAKE_BODY_SIZE, 3*SNAKE_BODY_SIZE, 2*SNAKE_BODY_SIZE]; // x positions of snake body parts
-let snake_y = [4*SNAKE_BODY_SIZE, 4*SNAKE_BODY_SIZE, 4*SNAKE_BODY_SIZE]; // y positions of snake body parts
+let snake_x = [4*SNAKE_BODY_SIZE, 3*SNAKE_BODY_SIZE, 2*SNAKE_BODY_SIZE, 1*SNAKE_BODY_SIZE]; // x positions of snake body parts
+let snake_y = [4*SNAKE_BODY_SIZE, 4*SNAKE_BODY_SIZE, 4*SNAKE_BODY_SIZE, 4*SNAKE_BODY_SIZE]; // y positions of snake body parts
 let snake_tick_ctr = 0; // counter to check if the snake should be updated
 let snake_dir = SNAKE_DIRECTION_RIGHT;
 let snake_dir_next = SNAKE_DIRECTION_RIGHT;
@@ -32,16 +32,18 @@ function setup() {
 
 function draw() {
     background(CANVAS_BACKGROUND_COLOR);
-    update_snake();
+    // only update the snake every SNAKE_UPDATE_RATE frames
+    if (snake_tick_ctr < SNAKE_UPDATE_RATE) {
+        ++snake_tick_ctr;
+    } else {
+        update_snake();
+        snake_tick_ctr = 0;
+    }
+    // TODO optimize: only need to redraw on update, really
     draw_snake();
 }
 
 function update_snake() {
-    // do not update the snake before necessary
-    if (snake_tick_ctr < SNAKE_UPDATE_RATE) {
-        ++snake_tick_ctr;
-        return;
-    }
 
     // actually update the snakes direction
     snake_dir = snake_dir_next;
@@ -62,22 +64,35 @@ function update_snake() {
             break;
     }
 
-    // advance the entire snake one tile in the direction specified by
-    // x and y
-    function move_snake(x, y) {
-        // move all non-head snake body parts forward, from last to first
-        for (let i = snake_x.length - 1; i > 0; --i) {
-            snake_x[i] = snake_x[i - 1];
-            snake_y[i] = snake_y[i - 1];
-        }
-
-        // move snake head
-        snake_x[0] += x * SNAKE_BODY_SIZE;
-        snake_y[0] += y * SNAKE_BODY_SIZE;
-    }
-
     snake_tick_ctr = 0;
 }
+
+// advance the entire snake one tile in the direction specified by
+// x and y
+function move_snake(x, y) {
+    // move all non-head snake body parts forward, from last to first
+    for (let i = snake_x.length - 1; i > 0; --i) {
+        snake_x[i] = snake_x[i - 1];
+        snake_y[i] = snake_y[i - 1];
+    }
+
+    // move snake head
+    snake_x[0] += x * SNAKE_BODY_SIZE;
+    snake_y[0] += y * SNAKE_BODY_SIZE;
+    // wrap around the world
+    if (snake_x[0] >= CANVAS_SIZE) { // reached right border
+        snake_x[0] = 0;
+    }
+    if (snake_x[0] < 0) { // reached left border
+        snake_x[0] = CANVAS_SIZE - SNAKE_BODY_SIZE;
+    }
+    if (snake_y[0] >= CANVAS_SIZE) { // reached lower border
+        snake_y[0] = 0;
+    }
+    if (snake_y[0] < 0) { // reached upped border
+        snake_y[0] = CANVAS_SIZE - SNAKE_BODY_SIZE;
+    }
+}    
 
 function draw_snake() {
     fill(snake_hue, HSB_MAX, HSB_MAX);
