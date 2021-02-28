@@ -120,11 +120,12 @@ function move_snake(x, y) {
 function generate_new_food() {
     let conflict = false;
     do {
+        console.log(`generating new food... (${conflict})`);
         conflict = false;
         food_x = Math.floor(random(CANVAS_SIZE_GRID));
         food_y = Math.floor(random(CANVAS_SIZE_GRID));
         for (let i = 0; i < snake_x.length; ++i) {
-            conflict = conflict | snake_x[i] === food_x | snake_y[i] === food_y;
+            conflict = conflict || (snake_x[i] === food_x && snake_y[i] === food_y);
         }
     } while (conflict);
 }
