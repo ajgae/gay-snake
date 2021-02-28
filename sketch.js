@@ -2,11 +2,11 @@
 const HSB_MAX = 256;
 const FRAME_RATE = 30;
 
-const CANVAS_SIZE_PX = 400; // canvas size, in pixels
-const CANVAS_SIZE_GRID = 20; // canvas size, in grid cell count
+const CANVAS_SIZE_GRID = 20;
+const GRID_CELL_SIZE = 20;
+const CANVAS_SIZE_PX = CANVAS_SIZE_GRID * GRID_CELL_SIZE; // canvas size, in pixels
 const CANVAS_BACKGROUND_COLOR = 0;
 
-const GRID_CELL_SIZE = CANVAS_SIZE_PX / CANVAS_SIZE_GRID; // aka. grid cell size
 const SNAKE_UPDATE_RATE = FRAME_RATE / 8; // snake is updated every `SNAKE_UPDATE_RATE` frames
 const SNAKE_DIRECTION_LEFT = 0;
 const SNAKE_DIRECTION_UP = 1;
