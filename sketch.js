@@ -2,9 +2,11 @@
 const HSB_MAX = 256;
 const FRAME_RATE = 30;
 
-const CANVAS_SIZE_GRID = 10;
+const CANVAS_WIDTH_GRID = 20;
+const CANVAS_HEIGHT_GRID = 10;
 const GRID_CELL_SIZE = 50;
-const CANVAS_SIZE_PX = CANVAS_SIZE_GRID * GRID_CELL_SIZE; // canvas size, in pixels
+const CANVAS_WIDTH_PX = CANVAS_WIDTH_GRID * GRID_CELL_SIZE; // canvas size, in pixels
+const CANVAS_HEIGHT_PX = CANVAS_HEIGHT_GRID * GRID_CELL_SIZE; // canvas size, in pixels
 const CANVAS_BACKGROUND_COLOR = 0;
 
 const SNAKE_UPDATE_RATE = FRAME_RATE / 8; // snake is updated every `SNAKE_UPDATE_RATE` frames
@@ -16,8 +18,8 @@ const SNAKE_HUE_OFFSET = HSB_MAX / 16; // offset in hue that each body part has 
 
 // GLOBAL STATE (snake)
 let snake_hue = 0; // snake body color
-let snake_x = [CANVAS_SIZE_GRID / 2 - 1, CANVAS_SIZE_GRID / 2 - 2]; // x positions of snake body parts, in grid cell count
-let snake_y = [CANVAS_SIZE_GRID / 2 - 1, CANVAS_SIZE_GRID / 2 - 1]; // y positions of snake body parts, in grid cell count
+let snake_x = [CANVAS_WIDTH_GRID / 2 - 1, CANVAS_WIDTH_GRID / 2 - 2]; // x positions of snake body parts, in grid cell count
+let snake_y = [CANVAS_HEIGHT_GRID / 2 - 1, CANVAS_HEIGHT_GRID / 2 - 1]; // y positions of snake body parts, in grid cell count
 let snake_tick_ctr = 0; // counter to check if the snake should be updated
 let snake_dir = SNAKE_DIRECTION_RIGHT;
 let snake_dir_next = SNAKE_DIRECTION_RIGHT;
@@ -36,7 +38,7 @@ function setup() {
     noStroke();
 
     // canvas stuff
-    createCanvas(CANVAS_SIZE_PX, CANVAS_SIZE_PX);
+    createCanvas(CANVAS_WIDTH_PX, CANVAS_HEIGHT_PX);
     background(CANVAS_BACKGROUND_COLOR);
 }
 
@@ -108,17 +110,17 @@ function move_snake(x, y) {
     snake_x[0] += x;
     snake_y[0] += y;
     // wrap around the world
-    if (snake_x[0] >= CANVAS_SIZE_GRID) { // reached right border
+    if (snake_x[0] >= CANVAS_WIDTH_GRID) { // reached right border
         snake_x[0] = 0;
     }
     if (snake_x[0] < 0) { // reached left border
-        snake_x[0] = CANVAS_SIZE_GRID - 1;
+        snake_x[0] = CANVAS_WIDTH_GRID - 1;
     }
-    if (snake_y[0] >= CANVAS_SIZE_GRID) { // reached lower border
+    if (snake_y[0] >= CANVAS_HEIGHT_GRID) { // reached lower border
         snake_y[0] = 0;
     }
     if (snake_y[0] < 0) { // reached upped border
-        snake_y[0] = CANVAS_SIZE_GRID - 1;
+        snake_y[0] = CANVAS_HEIGHT_GRID - 1;
     }
 }
 
@@ -138,8 +140,8 @@ function generate_new_food() {
     do {
         console.log(`generating new food... (${conflict})`);
         conflict = false;
-        food_x = Math.floor(random(CANVAS_SIZE_GRID));
-        food_y = Math.floor(random(CANVAS_SIZE_GRID));
+        food_x = Math.floor(random(CANVAS_WIDTH_GRID));
+        food_y = Math.floor(random(CANVAS_HEIGHT_GRID));
         for (let i = 0; i < snake_x.length; ++i) {
             conflict = conflict || (snake_x[i] === food_x && snake_y[i] === food_y);
         }
