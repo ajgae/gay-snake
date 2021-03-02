@@ -6,4 +6,4 @@ ok the only reason it is gay is because it's all rainbowy but that is enough in 
 
 ## installation
 
-You may want to change the script source in `index.html`. It currently refers to a `p5.min.js` file in the parent directory. For simplicity's sake, you may also use `https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.js` instead to link to the script as hosted on an external website.
+Just cloning the repository and opening `index.html` in Firefox should be enough. The p5.js dependency is pulled from `jsdelivr.net`, so make sure you haven't blocked scripts from that domain.
