@@ -44,17 +44,23 @@ function setup() {
 }
 
 function draw() {
-    background(CANVAS_BACKGROUND_COLOR);
-
     // only update the snake every SNAKE_UPDATE_RATE frames
     if (snake_tick_ctr < SNAKE_UPDATE_RATE) {
         ++snake_tick_ctr;
     } else {
         update_snake();
         snake_tick_ctr = 0;
+        paint();
     }
+}
 
-    // TODO optimize: only need to redraw on update, really
+/**
+ * Redraw everything (snake, food).
+ */
+function paint() {
+    console.log("redrawing");
+    background(CANVAS_BACKGROUND_COLOR);
+
     draw_snake();
     draw_food();
 }
